@@ -1,7 +1,0 @@
-# config.toml
-
-[JVM]
-path = "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"  # JVM 경로 설정
-
-[JVMClasspath]
-path = "path/to/classpath.jar"  # JVM 클래스 경로 설정
