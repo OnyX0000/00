@@ -14,6 +14,20 @@ from sklearn.metrics.pairwise import cosine_similarity
 from konlpy.tag import Okt
 import streamlit as st
 import requests
+import jpype
+from toml import load
+import streamlit as st
+
+# config.toml 파일 로드
+config = load("config.toml")
+
+# JVM 경로 설정
+jvm_path = config["JVM"]["path"]
+jpype.startJVM(jvm_path)
+
+# JVM 클래스 경로 설정
+classpath_path = config["JVMClasspath"]["path"]
+jpype.addClassPath(classpath_path)
 
 csv.field_size_limit(2**31 - 1)  # Set a smaller field size limit
 
