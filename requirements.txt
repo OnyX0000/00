@@ -3,3 +3,4 @@ requests
 pandas
 konlpy
 scikit-learn
+JPype1
