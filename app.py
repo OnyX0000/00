@@ -11,6 +11,7 @@ import warnings
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from konlpy.tag import Okt
 import streamlit as st
 import requests
 
@@ -20,7 +21,8 @@ csv_filename = "https://raw.githubusercontent.com/OnyX0000/00/main/allend_law_ex
 csv_filename2 = "https://raw.githubusercontent.com/OnyX0000/00/main/allend_cases_example.csv"
 
 def calculate_sentence_similarity(word, sentence):
-    tokenizer = lambda x: x.split()  # 공백으로 토큰화
+    okt = Okt()
+    tokenizer = okt.morphs
     vectorizer = TfidfVectorizer(tokenizer=tokenizer)
 
     corpus = [word] + [sentence]
@@ -41,10 +43,11 @@ def load_data_from_csv(csv_url):
     return headers, rows
 
 def calculate_sentence_similarities(word, sentences):
-    tokenizer = lambda x: x.split()  # 공백으로 토큰화
+    okt = Okt()
+    tokenizer = okt.morphs
     vectorizer = TfidfVectorizer(tokenizer=tokenizer)
     tfidf_matrix = vectorizer.fit_transform(sentences)
-    word_tokens = word.split()
+    word_tokens = okt.morphs(word)
     word_vector = vectorizer.transform([' '.join(word_tokens)])
     cosine_similarities = cosine_similarity(tfidf_matrix, word_vector)
     return cosine_similarities
@@ -134,11 +137,6 @@ def main():
 if __name__ == '__main__':
     main()
 
-# In[ ]:
-
-
-
-
 
 # In[ ]:
 
@@ -154,6 +152,11 @@ if __name__ == '__main__':
 
 # In[ ]:
 
+
+
+
+
+# In[ ]:
 
 
 
