@@ -11,23 +11,8 @@ import warnings
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from konlpy.tag import Okt
 import streamlit as st
 import requests
-import jpype
-from toml import load
-import streamlit as st
-
-# config.toml 파일 로드
-config = load("config.toml")
-
-# JVM 경로 설정
-jvm_path = config["JVM"]["path"]
-jpype.startJVM(jvm_path)
-
-# JVM 클래스 경로 설정
-classpath_path = config["JVMClasspath"]["path"]
-jpype.addClassPath(classpath_path)
 
 csv.field_size_limit(2**31 - 1)  # Set a smaller field size limit
 
@@ -35,8 +20,7 @@ csv_filename = "https://raw.githubusercontent.com/OnyX0000/00/main/allend_law_ex
 csv_filename2 = "https://raw.githubusercontent.com/OnyX0000/00/main/allend_cases_example.csv"
 
 def calculate_sentence_similarity(word, sentence):
-    okt = Okt()
-    tokenizer = okt.morphs
+    tokenizer = lambda x: x.split()  # 공백으로 토큰화
     vectorizer = TfidfVectorizer(tokenizer=tokenizer)
 
     corpus = [word] + [sentence]
@@ -57,11 +41,10 @@ def load_data_from_csv(csv_url):
     return headers, rows
 
 def calculate_sentence_similarities(word, sentences):
-    okt = Okt()
-    tokenizer = okt.morphs
+    tokenizer = lambda x: x.split()  # 공백으로 토큰화
     vectorizer = TfidfVectorizer(tokenizer=tokenizer)
     tfidf_matrix = vectorizer.fit_transform(sentences)
-    word_tokens = okt.morphs(word)
+    word_tokens = word.split()
     word_vector = vectorizer.transform([' '.join(word_tokens)])
     cosine_similarities = cosine_similarity(tfidf_matrix, word_vector)
     return cosine_similarities
@@ -150,7 +133,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
 # In[ ]:
 
